@@ -10,6 +10,7 @@ public class EmailUtils {
 
         if (!ObjectUtils.isEmpty(authentication) && authentication.getPrincipal() != null) {
             String email = (String) authentication.getPrincipal();
+
             if (!email.equals("anonymousUser")) {
                 return email;
             }

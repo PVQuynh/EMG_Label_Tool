@@ -27,6 +27,7 @@ public class User extends  BaseEntity {
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
+    @Temporal(TemporalType.DATE)
     private Date dob;
 
     @Email(message = "Email isn't valid")

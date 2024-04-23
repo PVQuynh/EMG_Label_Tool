@@ -24,6 +24,7 @@ public class DataFile extends  BaseEntity {
 
     private String side;
 
+    @Temporal(TemporalType.DATE)
     private Date doe; // Date of Examination
 
     @Column(nullable = false)

@@ -24,6 +24,7 @@ public class Patient extends  BaseEntity {
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
+    @Temporal(TemporalType.DATE)
     private Date dob;
 
     private float height;
