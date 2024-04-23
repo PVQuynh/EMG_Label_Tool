@@ -28,9 +28,9 @@ public class UserDTO {
 
     private String role;
 
-    private Date birthDay;
+    private Date dob;
 
-    private String gender;
+    private String sex;
 
     private  String avatarLocation;
 }

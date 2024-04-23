@@ -16,16 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public UserDTO getUserInFor() {
-        try {
-            return userService.getCurrentUser();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    @GetMapping("/me/v2")
-    public MessageResponse getUserInFor_v2() {
+    public MessageResponse getMe() {
         MessageResponse ms = new MessageResponse();
 
         try {
@@ -52,13 +43,8 @@ public class UserController {
         return ms;
     }
 
-    @PostMapping("/search")
-    public PageDTO<UserDTO> GetLists(@RequestBody UserSearchReq userSearchReq) {
-        return userService.search(userSearchReq);
-    }
-
-    @GetMapping("/search/v2")
-    public MessageResponse getList_v2(
+    @GetMapping("/search")
+    public MessageResponse getList(
             @RequestParam(required = true) String text,
             @RequestParam(defaultValue = "1", required = true) int page,
             @RequestParam(defaultValue = "10", required = true) int size,
@@ -68,7 +54,7 @@ public class UserController {
         MessageResponse ms = new MessageResponse();
 
         try {
-            ms.data = userService.search_v2(page, size, text, ascending, orderBy);
+            ms.data = userService.search(page, size, text, ascending, orderBy);
         } catch (Exception ex) {
             ms.code = HttpStatus.NOT_FOUND.value();
             ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();

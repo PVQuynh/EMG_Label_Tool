@@ -29,9 +29,7 @@ public interface UserService {
 
     void uploadAvatar(UploadAvatarReq uploadAvatarReq);
 
-    PageDTO<UserDTO> search(UserSearchReq userSearchReq);
-
-    PageDTO<UserDTO> search_v2(int page, int size, String text, boolean ascending, String orderBy);
+    PageDTO<UserDTO> search(int page, int size, String text, boolean ascending, String orderBy);
 
     UserDetailDTO getUserById(long userId);
 

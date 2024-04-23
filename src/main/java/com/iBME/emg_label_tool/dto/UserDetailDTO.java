@@ -29,13 +29,11 @@ public class UserDetailDTO {
 
     private String role;
 
-    private Date birthDay;
+    private Date dob;
 
-    private String gender;
+    private String sex;
 
     private  String avatarLocation;
-
-    private  int friendStatus;
 
     public UserDetailDTO(UserDTO userDTO) {
         this.userId = userDTO.getUserId();
@@ -44,8 +42,8 @@ public class UserDetailDTO {
         this.phoneNumber = userDTO.getPhoneNumber();
         this.address = userDTO.getAddress();
         this.role = userDTO.getRole();
-        this.birthDay = userDTO.getBirthDay();
-        this.gender = userDTO.getGender();
+        this.dob = userDTO.getDob();
+        this.sex = userDTO.getSex();
         this.avatarLocation = userDTO.getAvatarLocation();
     }
 }

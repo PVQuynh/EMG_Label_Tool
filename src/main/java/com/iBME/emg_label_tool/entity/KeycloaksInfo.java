@@ -24,6 +24,7 @@ public class KeycloaksInfo {
     private String azp;
     private String session_state;
     private String acr;
+
     @JsonProperty("allowed-origins")
     private List<String> allowed_origins;
     private RealmAccess realm_access;

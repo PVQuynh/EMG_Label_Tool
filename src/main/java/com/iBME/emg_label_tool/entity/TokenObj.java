@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenObj implements Serializable {
+
     private String email;
 
     private String password;

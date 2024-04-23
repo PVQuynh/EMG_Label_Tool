@@ -3,7 +3,7 @@ package com.iBME.emg_label_tool.service.impl;
 import com.iBME.emg_label_tool.dto.RoleDTO;
 import com.iBME.emg_label_tool.entity.Role;
 import com.iBME.emg_label_tool.exception.BusinessLogicException;
-import com.iBME.emg_label_tool.mapper.impl.RoleMapper;
+import com.iBME.emg_label_tool.mapper.RoleMapper;
 import com.iBME.emg_label_tool.repository.RoleRepository;
 import com.iBME.emg_label_tool.service.RoleService;
 import lombok.RequiredArgsConstructor;

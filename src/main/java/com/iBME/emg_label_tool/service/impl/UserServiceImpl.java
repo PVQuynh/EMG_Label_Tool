@@ -4,14 +4,11 @@ import com.iBME.emg_label_tool.dto.PageDTO;
 import com.iBME.emg_label_tool.dto.UserDTO;
 import com.iBME.emg_label_tool.dto.UserDetailDTO;
 import com.iBME.emg_label_tool.dto.request.*;
-import com.iBME.emg_label_tool.dto.response.MessageResponse;
-import com.iBME.emg_label_tool.entity.FriendShip;
 import com.iBME.emg_label_tool.entity.Role;
 import com.iBME.emg_label_tool.entity.User;
-import com.iBME.emg_label_tool.enum_constant.Gender;
+import com.iBME.emg_label_tool.enum_constant.Sex;
 import com.iBME.emg_label_tool.exception.BusinessLogicException;
-import com.iBME.emg_label_tool.mapper.impl.UserMapper;
-import com.iBME.emg_label_tool.repository.FriendShipRepository;
+import com.iBME.emg_label_tool.mapper.UserMapper;
 import com.iBME.emg_label_tool.repository.RoleRepository;
 import com.iBME.emg_label_tool.repository.UserRepository;
 import com.iBME.emg_label_tool.service.KeycloakService;
@@ -49,8 +46,6 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
-    private final FriendShipRepository friendShipRepository;
-
 
     @Override
     public User create(RegisterReq registerReq) {
@@ -58,7 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setName(registerReq.getName());
         user.setEmail(registerReq.getEmail());
         user.setPassword(registerReq.getPassword());
-        Role role = roleRepository.findByCode(registerReq.getRole()).orElse(null);
+        Role role = roleRepository.findByCode(registerReq.getRole()).orElseThrow(BusinessLogicException::new);
         user.setRole(role);
 
         return userRepository.save(user);
@@ -68,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long id) {
         String email = EmailUtils.getCurrentUser();
-        if (org.apache.commons.lang3.ObjectUtils.isEmpty(email)) {
+        if (ObjectUtils.isEmpty(email)) {
             throw new BusinessLogicException();
         }
 
@@ -85,11 +80,8 @@ public class UserServiceImpl implements UserService {
     public User findById(long Id) {
         var userOptional = userRepository.findById(Id);
 
-        if (userOptional.isPresent()) {
-            return userOptional.get();
-        }
+        return userOptional.orElseGet(User::new);
 
-        return null;
     }
 
     @Override
@@ -112,22 +104,22 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.findByEmail(email).orElseThrow(BusinessLogicException::new);
-        if (updateUserReq.getName() != null) {
+        if (!ObjectUtils.isEmpty(updateUserReq.getName())) {
             user.setName(updateUserReq.getName());
         }
-        if (updateUserReq.getPhoneNumber() != null) {
+        if ( !ObjectUtils.isEmpty(updateUserReq.getPhoneNumber())) {
             user.setPhoneNumber(updateUserReq.getPhoneNumber());
         }
-        if (updateUserReq.getAddress() != null) {
+        if (!ObjectUtils.isEmpty(updateUserReq.getAddress())  ) {
             user.setAddress(updateUserReq.getAddress());
         }
-        if (updateUserReq.getBirthDay() != null) {
+        if (!ObjectUtils.isEmpty(updateUserReq.getBirthDay())) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date birthDay = dateFormat.parse(updateUserReq.getBirthDay());
-            user.setBirthDay(birthDay);
+            user.setDob(birthDay);
         }
-        if (updateUserReq.getGender() != null) {
-            user.setGender(Gender.valueOf(updateUserReq.getGender()));
+        if (!ObjectUtils.isEmpty(updateUserReq.getGender())) {
+            user.setSex(Sex.valueOf(updateUserReq.getGender()));
         }
 
         userRepository.save(user);
@@ -164,60 +156,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-
     @Override
-    public PageDTO<UserDTO> search(UserSearchReq userSearchReq) {
-        String email = EmailUtils.getCurrentUser();
-        if (ObjectUtils.isEmpty(email)) {
-            throw new BusinessLogicException();
-        }
-
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-
-        Root<User> root = criteriaQuery.from(User.class);
-        List<Predicate> predicates = new ArrayList<>();
-
-        // Filter by text (if provided)
-        if (!ObjectUtils.isEmpty(userSearchReq.text)) {
-            String searchText = "%" + userSearchReq.text + "%";
-            Predicate nameLike = criteriaBuilder.like(root.get("name"), searchText);
-            Predicate emailLike = criteriaBuilder.like(root.get("email"), searchText);
-            Predicate validEmail = criteriaBuilder.notEqual(root.get("email"), email);
-            predicates.add(criteriaBuilder.or(nameLike, emailLike));
-            predicates.add(validEmail);
-        } else return null;
-
-        // Filter by descending and orderBy (if provided)
-        if (!ObjectUtils.isEmpty(userSearchReq.ascending) && !ObjectUtils.isEmpty(
-                userSearchReq.orderBy)) {
-            if (userSearchReq.ascending) {
-                criteriaQuery.orderBy(criteriaBuilder.asc(root.get(userSearchReq.orderBy)));
-            } else {
-                criteriaQuery.orderBy(criteriaBuilder.desc(root.get(userSearchReq.orderBy)));
-            }
-        }
-
-        if (!predicates.isEmpty()) {
-            criteriaQuery.where(predicates.toArray(new Predicate[0]));
-        }
-
-        TypedQuery<User> query = entityManager.createQuery(criteriaQuery);
-        int totalRows = query.getResultList().size();
-
-        List<User> results = query
-                .setFirstResult((userSearchReq.page - 1) * userSearchReq.size) // Offset
-                .setMaxResults(userSearchReq.size) // Limit
-                .getResultList();
-
-        PageDTO<UserDTO> userResPageDTO = new PageDTO<>(userMapper.toDTOList(results),
-                userSearchReq.page, totalRows);
-
-        return userResPageDTO;
-    }
-
-    @Override
-    public PageDTO<UserDTO> search_v2(int page, int size, String text, boolean ascending, String orderBy) {
+    public PageDTO<UserDTO> search(int page, int size, String text, boolean ascending, String orderBy) {
         String email = EmailUtils.getCurrentUser();
         if (ObjectUtils.isEmpty(email)) {
             throw new BusinessLogicException();
@@ -237,7 +177,7 @@ public class UserServiceImpl implements UserService {
             Predicate validEmail = criteriaBuilder.notEqual(root.get("email"), email);
             predicates.add(criteriaBuilder.or(nameLike, emailLike));
             predicates.add(validEmail);
-        } else return null;
+        }
 
         // Filter by descending and orderBy (if provided)
         if (!ObjectUtils.isEmpty(ascending) && !ObjectUtils.isEmpty(orderBy)) {
@@ -280,13 +220,8 @@ public class UserServiceImpl implements UserService {
         User currentUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException());
 
-        if (currentUser.getRole().getCode().equals("USER")) {
-            FriendShip friendShip = friendShipRepository.checkFriendStatus(currentUser.getId(),
-                            userDetailDTO.getUserId())
-                    .orElseThrow(BusinessLogicException::new);
 
-            userDetailDTO.setFriendStatus(friendShip.getStatus());
-        }
+
         return userDetailDTO;
 
     }

@@ -21,7 +21,8 @@ public class JpaAuditingConfig {
         @Override
         public Optional<String> getCurrentAuditor() {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-           return authentication==null ? null : Optional.ofNullable(authentication.getName());
+
+           return authentication == null ? null : Optional.ofNullable(authentication.getName());
         }
     }
 

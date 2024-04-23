@@ -3,18 +3,13 @@ package com.iBME.emg_label_tool.controller;
 
 import com.iBME.emg_label_tool.dto.request.ConfirmOTP;
 import com.iBME.emg_label_tool.dto.request.ForgotPasswordReq;
-import com.iBME.emg_label_tool.dto.request.RegisterReq;
 import com.iBME.emg_label_tool.dto.response.MessageResponse;
 import com.iBME.emg_label_tool.entity.User;
 import com.iBME.emg_label_tool.service.EmailService;
-import com.iBME.emg_label_tool.service.KeycloakService;
 import com.iBME.emg_label_tool.service.OTPService;
 import com.iBME.emg_label_tool.service.UserService;
-import com.iBME.emg_label_tool.utils.RandomString;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,15 +23,11 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ForgotPasswordController {
 
-    private final KeycloakService keycloakService;
-
     private final UserService userService;
 
     private final OTPService otpService;
 
     private final EmailService emailService;
-
-    private final RedisTemplate<String, Object> redisTemplate;
 
 
     @PostMapping("/generate-otp")

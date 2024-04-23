@@ -77,10 +77,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 ObjectMapper objectMapper = new ObjectMapper();
                 KeycloaksInfo userInfo = objectMapper.readValue(abc, KeycloaksInfo.class);
                 return userInfo;
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-       return  null;
+
+       return null;
     }
 }

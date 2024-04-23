@@ -1,6 +1,6 @@
 package com.iBME.emg_label_tool.entity;
 
-import com.iBME.emg_label_tool.enum_constant.Gender;
+import com.iBME.emg_label_tool.enum_constant.Sex;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -20,30 +21,43 @@ import java.util.Date;
 @AttributeOverride(name = "id", column = @Column(name = "user_id"))
 public class User extends  BaseEntity {
 
+    @Column(nullable = false)
+    private  String name;
+
+    @Enumerated(EnumType.STRING)
+    private Sex sex;
+
+    private Date dob;
+
     @Email(message = "Email isn't valid")
     @Column(unique = true,nullable = false)
     private  String email;
 
     private String password;
 
-    @Column(nullable = false)
-    private  String name;
+    private String phoneNumber;
 
     private String address;
 
-    private  String phoneNumber;
-
     private  String avatarLocation;
 
-    private  boolean isOauth2;
-
-    private Date birthDay;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code")
     private Role role;
 
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL}
+    )
+    @JoinTable(
+            name = "user_data_file",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "data_file_id")
+    )
+    private List<DataFile> dataFileList;
+
 }
+
+
+
+
+

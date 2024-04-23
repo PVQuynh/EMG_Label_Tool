@@ -2,7 +2,7 @@ package com.iBME.emg_label_tool.mapper.impl;
 
 import com.iBME.emg_label_tool.dto.RoleDTO;
 import com.iBME.emg_label_tool.entity.Role;
-import com.iBME.emg_label_tool.mapper.Mapper;
+import com.iBME.emg_label_tool.mapper.RoleMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class RoleMapper implements Mapper<Role, RoleDTO> {
+public class RoleMapperImpl implements RoleMapper {
 
     @Override
     public Role toEntity(RoleDTO dto) {
