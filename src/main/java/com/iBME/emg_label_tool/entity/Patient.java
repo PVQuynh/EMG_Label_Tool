@@ -32,8 +32,7 @@ public class Patient extends  BaseEntity {
 
     private boolean isDeleted;
 
-    @OneToOne(
-            mappedBy = "patient",
-            cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "data_file_id")
     private DataFile dataFile;
 }

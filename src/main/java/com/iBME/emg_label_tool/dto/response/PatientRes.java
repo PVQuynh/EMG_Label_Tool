@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class PatientRes {
 
-    private long id;
+    private long patientId;
 
     private String name;
 
@@ -27,7 +27,6 @@ public class PatientRes {
 
     private float weight;
 
-    private String phoneNumber;
+    private long dataFileId;
 
-    private String address;
 }

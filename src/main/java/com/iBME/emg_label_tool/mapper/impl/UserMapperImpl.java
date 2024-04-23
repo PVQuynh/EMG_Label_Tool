@@ -23,7 +23,6 @@ public class UserMapperImpl implements UserMapper{
 
     @Override
     public User toEntity(UserDTO dto) {
-
         Sex sex = dto.getSex().equals("MALE") ? Sex.MALE : Sex.FEMALE;
         Role role = roleRepository.findByCode(dto.getRole()).orElse(null);
         ModelMapper modelMapper = new ModelMapper();

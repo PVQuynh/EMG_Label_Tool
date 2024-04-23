@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +24,7 @@ public class DataFile extends  BaseEntity {
 
     private String side;
 
-    private Date DoE; // Date of Examination
+    private Date doe; // Date of Examination
 
     @Column(nullable = false)
     private String dataFileLocation;
@@ -34,8 +33,9 @@ public class DataFile extends  BaseEntity {
 
     private boolean isDeleted;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "patient_id")
+    @OneToOne(
+            mappedBy = "dataFile",
+            cascade = CascadeType.PERSIST)
     private Patient patient;
 
     @ManyToMany(fetch = FetchType.LAZY,

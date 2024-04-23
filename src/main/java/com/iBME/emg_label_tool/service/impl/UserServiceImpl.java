@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
 
     private final RoleRepository roleRepository;
 
-
     @Override
     public User create(RegisterReq registerReq) {
         User user = new User();
@@ -81,7 +80,6 @@ public class UserServiceImpl implements UserService {
         var userOptional = userRepository.findById(Id);
 
         return userOptional.orElseGet(User::new);
-
     }
 
     @Override
