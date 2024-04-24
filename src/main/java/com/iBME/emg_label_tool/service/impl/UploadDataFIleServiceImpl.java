@@ -1,13 +1,13 @@
 package com.iBME.emg_label_tool.service.impl;
 
+import com.iBME.emg_label_tool.dto.InforFile;
 import com.iBME.emg_label_tool.service.UploadDataFIleService;
 import com.iBME.emg_label_tool.utils.GetPreSignedUrlUtils;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.http.Method;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
+
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class UploadDataFIleServiceImpl implements UploadDataFIleService {
     @Value("${minio.default.folder}")
     String defaultBaseFolder;
     @Override
-    public String saveAndGetFileLocation(MultipartFile file) {
+    public InforFile saveAndGetFileLocation(MultipartFile file) {
         try {
             String name = file.getOriginalFilename();
             byte[] content = file.getBytes();
@@ -56,7 +58,10 @@ public class UploadDataFIleServiceImpl implements UploadDataFIleService {
                                     .expiry(7, TimeUnit.DAYS)
                                     .build());
 
-            return getPreSignedUrlUtils.getPreSignedUrl(url);
+            return InforFile.builder()
+                    .fileName(name)
+                    .filePath(getPreSignedUrlUtils.getPreSignedUrl(url))
+                    .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

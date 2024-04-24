@@ -1,10 +1,8 @@
 package com.iBME.emg_label_tool.dto.request;
 
 import com.iBME.emg_label_tool.enum_constant.Sex;
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +20,8 @@ public class PatientReq {
     private Sex sex;
 
     private Date dob;
+
+    private int age;
 
     private float height;
 
