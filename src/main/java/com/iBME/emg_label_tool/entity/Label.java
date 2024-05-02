@@ -24,9 +24,6 @@ public class Label extends  BaseEntity {
 
     private boolean doubleCheck;
 
-    @Column(nullable = false)
-    private String patientDataLocation;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "data_file_id")
     private DataFile dataFile;

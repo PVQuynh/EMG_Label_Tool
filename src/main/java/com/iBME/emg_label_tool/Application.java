@@ -17,9 +17,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @OpenAPIDefinition(
 		info = @Info(
-				title = "EMG Label Tool",
+				title = "EMG Segment Tool",
 				version = "1.0.0",
-				description = "Label muscle signals for diseases",
+				description = "Segment muscle signals for diseases",
 				contact = @Contact(
 						name = "Phạm Văn Quỳnh",
 						email = "quynh.pv193074@sis.hust.edu.vn"

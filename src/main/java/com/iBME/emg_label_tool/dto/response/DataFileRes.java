@@ -27,4 +27,8 @@ public class DataFileRes {
 
     private boolean isLabeled;
 
+    private long patientId;
+
+    private String patientName;
+
 }

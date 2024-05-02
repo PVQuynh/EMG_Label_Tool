@@ -5,7 +5,6 @@ import com.iBME.emg_label_tool.dto.response.DataFileRes;
 import com.iBME.emg_label_tool.entity.DataFile;
 import com.iBME.emg_label_tool.mapper.DataFileMapper;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class DataFileMapperImpl implements DataFileMapper {
     @Override
     public List<DataFile> toEntityList(List<DataFileReq> dtoList) {
         return dtoList.stream()
-                .map(dataFileReq -> toEntity(dataFileReq))
+                .map(this::toEntity)
                 .collect(Collectors.toList());
     }
 
@@ -38,7 +37,7 @@ public class DataFileMapperImpl implements DataFileMapper {
     @Override
     public List<DataFileRes> toDTOList(List<DataFile> entityList) {
         return entityList.stream()
-                .map(dataFile -> toDTO(dataFile))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 }

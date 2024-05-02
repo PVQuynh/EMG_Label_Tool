@@ -16,11 +16,6 @@ public class LabelReq {
 
     private String note;
 
-    private boolean doubleCheck;
-
-    @Column(nullable = false)
-    private String patientDataLocation;
-
     private long dataFileId;
 
     private long diseaseId;

@@ -1,15 +1,11 @@
 package com.iBME.emg_label_tool.controller;
 
-import com.iBME.emg_label_tool.dto.request.ChangePasswordReq;
 import com.iBME.emg_label_tool.dto.request.DataFileReq;
 import com.iBME.emg_label_tool.dto.response.MessageResponse;
 import com.iBME.emg_label_tool.service.DataFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/data-files")
@@ -26,6 +22,34 @@ public class DataFileController {
         } catch (Exception ex) {
             ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
             ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+        }
+
+        return ms;
+    }
+
+    @GetMapping("/all")
+    public MessageResponse getAllDataFile() {
+        MessageResponse ms = new MessageResponse();
+
+        try {
+            ms.data = dataFileService.getAllDataFile();
+        } catch (Exception ex) {
+            ms.code = HttpStatus.NOT_FOUND.value();
+            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+        }
+
+        return ms;
+    }
+
+    @GetMapping("/{patientId}")
+    public MessageResponse getByPatientId(@PathVariable("patientId") long patientId) {
+        MessageResponse ms = new MessageResponse();
+
+        try {
+            ms.data = dataFileService.getDataFileByPatientId(patientId);
+        } catch (Exception ex) {
+            ms.code = HttpStatus.NOT_FOUND.value();
+            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
         }
 
         return ms;

@@ -78,7 +78,7 @@ public class ForgotPasswordController {
 
                         // Send new password to email
                         String message = "Your new password is: " + user.getPassword();
-                        emailService.sendOtpMessage(email, "New Password For Your EMG Label Tool", message);
+                        emailService.sendOtpMessage(email, "New Password For Your EMG Segment Tool", message);
                     } catch (Exception e) {
                         ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
                         ms.message = e.getMessage();

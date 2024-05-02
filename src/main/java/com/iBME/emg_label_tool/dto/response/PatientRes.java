@@ -27,6 +27,4 @@ public class PatientRes {
 
     private float weight;
 
-    private long dataFileId;
-
 }
