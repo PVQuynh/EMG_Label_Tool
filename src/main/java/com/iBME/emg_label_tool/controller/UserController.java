@@ -7,6 +7,7 @@ import com.iBME.emg_label_tool.dto.response.MessageResponse;
 import com.iBME.emg_label_tool.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,92 +17,88 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public MessageResponse getMe() {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?> getMe() {
+        ResponseEntity<?> re;
 
         try {
-            ms.data = userService.getCurrentUser();
+            re = ResponseEntity.ok(userService.getCurrentUser());
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 
     @GetMapping("/{id}")
-    public MessageResponse getById(@PathVariable long id) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?>  getById(@PathVariable long id) {
+        ResponseEntity<?> re;
 
         try {
-            ms.data = userService.getUserById(id);
+            re = ResponseEntity.ok(userService.getUserById(id));
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 
     @GetMapping("/search")
-    public MessageResponse getList(
+    public ResponseEntity<?>  getList(
             @RequestParam(required = true) String text,
             @RequestParam(defaultValue = "1", required = true) int page,
             @RequestParam(defaultValue = "10", required = true) int size,
             @RequestParam(required = false) boolean ascending,
             @RequestParam(required = false) String orderBy
     ) {
-        MessageResponse ms = new MessageResponse();
+        ResponseEntity<?> re;
 
         try {
-            ms.data = userService.search(page, size, text, ascending, orderBy);
+            re = ResponseEntity.ok(userService.search(page, size, text, ascending, orderBy));
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 
     @PutMapping
-    public MessageResponse updateUser(@RequestBody UpdateUserReq updateUserReq) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?>  updateUser(@RequestBody UpdateUserReq updateUserReq) {
+        ResponseEntity<?> re;
         try {
             userService.updateUser(updateUserReq);
+            re = ResponseEntity.ok(null);
         } catch (Exception ex) {
-            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ms;
+        return re;
     }
 
     @PostMapping("/change-password")
-    public MessageResponse changePassword(@RequestBody ChangePasswordReq changePasswordReq) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?>  changePassword(@RequestBody ChangePasswordReq changePasswordReq) {
+        ResponseEntity<?>  re = ResponseEntity.ok(null);
 
         try {
             if (!userService.changePassword(changePasswordReq)) {
-                ms.code = HttpStatus.NOT_FOUND.value();
-                ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+                re = ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("Password is incorrect!");
             }
         } catch (Exception ex) {
-            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 
     @PostMapping("/upload-avatar")
-    public MessageResponse getById(@RequestBody UploadAvatarReq uploadAvatarReq) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?> getById(@RequestBody UploadAvatarReq uploadAvatarReq) {
+        ResponseEntity<?>  re = ResponseEntity.ok("Upload avatar success!");
         try {
             userService.uploadAvatar(uploadAvatarReq);
         } catch (Exception ex) {
-            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ms;
+        return re;
     }
 
 }

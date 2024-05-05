@@ -3,7 +3,9 @@ package com.iBME.emg_label_tool.utils;
 import com.iBME.emg_label_tool.dto.request.DataFileAndPatientReq;
 import com.iBME.emg_label_tool.dto.request.DataFileReq;
 import com.iBME.emg_label_tool.dto.request.PatientReq;
+import com.iBME.emg_label_tool.dto.response.CoordinatesRes;
 import com.iBME.emg_label_tool.enum_constant.Sex;
+import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,9 +14,14 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-public class GetDataFIleAndPatient {
+public class UploadedFileUtils {
 
+    //
+    // lấy thông tin data file và bệnh nhân từ file .txt
+    //
     public static DataFileAndPatientReq GetDataFileAndPatientReqFromFile(String fileLocation) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(fileLocation).openStream()))) {
             DataFileReq dataFileReq = new DataFileReq();
@@ -100,15 +107,15 @@ public class GetDataFIleAndPatient {
                     .build();
 
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println(e.getMessage());
             return new DataFileAndPatientReq();
         }
     }
 
-
+    //
+    // tách dữ liệu từ các line trong file.txt
+    //
     public static String extractValueInTextLine(String line) {
-        // Tách chuỗi thành các phần tử dựa trên dấu phẩy
         String[] parts = line.split(",");
 
         // Lấy phần tử thứ hai và loại bỏ dấu ngoặc kép
@@ -127,5 +134,43 @@ public class GetDataFIleAndPatient {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //
+    // lấy ra các line chứa tọa độ (x,y)
+    //
+    public static List<CoordinatesRes> coordinatesList(String fileLocation) {
+        String startLinePrefix = "1,";
+        String endLinePrefix = "20000,";
+        List<CoordinatesRes> coordinatesList = new LinkedList<>();
+        boolean shouldRead = false;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(fileLocation).openStream()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // nếu bắt đầu là 1,
+                if (line.startsWith(startLinePrefix)) {
+                    shouldRead = true;
+                }
+
+                // luôn cho phép add khi gặp dòng 1,
+                if (shouldRead) {
+                    if(ObjectUtils.isEmpty(CoordinatesRes.getXYCoordinates(line))) {
+                        continue;
+                    }
+                    coordinatesList.add(CoordinatesRes.getXYCoordinates(line));
+                }
+
+                // kết thúc khi gặp dòng 20000,
+                if (line.startsWith(endLinePrefix)) {
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return coordinatesList;
     }
 }

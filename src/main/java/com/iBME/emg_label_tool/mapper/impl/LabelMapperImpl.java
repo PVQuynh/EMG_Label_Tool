@@ -41,18 +41,19 @@ public class LabelMapperImpl implements LabelMapper {
     public LabelRes toDTO(Label entity) {
         ModelMapper modelMapper = new ModelMapper();
 
-        return modelMapper.map(entity, LabelRes.class);
+        LabelRes labelRes = modelMapper.map(entity, LabelRes.class);
+        labelRes.setLabelResId(entity.getId());
+
+        return labelRes;
     }
 
     @Override
     public List<LabelRes> toDTOList(List<Label> entityList) {
-        return entityList.stream().map(entity->toDTO(entity)).collect(Collectors.toList());
-
+        return entityList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<Label> toEntityList(List<LabelReq> dtoList) {
-        return dtoList.stream().map(dto->toEntity(dto)).collect(Collectors.toList());
-
+        return dtoList.stream().map(this::toEntity).collect(Collectors.toList());
     }
 }

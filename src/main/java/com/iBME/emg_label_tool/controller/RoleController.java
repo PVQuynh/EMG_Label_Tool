@@ -7,6 +7,7 @@ import com.iBME.emg_label_tool.service.KeycloakService;
 import com.iBME.emg_label_tool.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,28 +18,35 @@ public class RoleController {
     private  final RoleService roleService;
 
     @GetMapping("/all")
-    public MessageResponse getRoles(){
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?> getRoles(){
+//        MessageResponse ms = new MessageResponse();
+        ResponseEntity<?> re;
         try {
-            ms.data = roleService.getAllRole();
+//            ms.data = roleService.getAllRole();
+            re = ResponseEntity.status(HttpStatus.OK).body(roleService.getAllRole());
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+//            ms.code = HttpStatus.NOT_FOUND.value();
+//            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(ex.getMessage());
         }
-        return ms;
+        return re;
     }
 
     @PostMapping
-    public MessageResponse createRole(@RequestBody Role role) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?> createRole(@RequestBody Role role) {
+//        MessageResponse ms = new MessageResponse();
+        ResponseEntity<?> re = ResponseEntity.status(HttpStatus.OK).body("Create Role SuccessFully!");
         try {
             keycloakService.createRole(role);
             roleService.create(role);
         } catch (Exception ex) {
-            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+//            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+//            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
         }
-        return ms;
+        return re;
     }
 
 }

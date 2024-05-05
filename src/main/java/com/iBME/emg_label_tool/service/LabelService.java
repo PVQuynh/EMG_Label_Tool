@@ -8,5 +8,5 @@ import java.util.List;
 public interface LabelService {
     void addLabel(LabelReq labelReq);
 
-    List<LabelRes> getAllLabel();
+    List<LabelRes> getAllLabelByDataFileId(long dataFileId);
 }

@@ -28,7 +28,7 @@ public class UploadDataFIleServiceImpl implements UploadDataFIleService {
     private final ApplicationEventPublisher publisher;
     private final GetPreSignedUrlUtils getPreSignedUrlUtils;
 
-    String defaultBucketName = "hust-app";
+    String defaultBucketName = "emg-app";
 
     @Value("${minio.default.folder}")
     String defaultBaseFolder;

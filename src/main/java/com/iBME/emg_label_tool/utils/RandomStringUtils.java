@@ -1,12 +1,8 @@
 package com.iBME.emg_label_tool.utils;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.ObjectUtils;
-
 import java.util.Random;
 
-public class RandomString {
+public class RandomStringUtils {
 
     public static String generateRandomString(int num) {
 //        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[{]}|;:',<.>/?";

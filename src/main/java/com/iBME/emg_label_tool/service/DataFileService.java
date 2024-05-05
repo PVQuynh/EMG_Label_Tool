@@ -5,6 +5,7 @@ import com.iBME.emg_label_tool.dto.PageDTO;
 import com.iBME.emg_label_tool.dto.UserDTO;
 import com.iBME.emg_label_tool.dto.UserDetailDTO;
 import com.iBME.emg_label_tool.dto.request.*;
+import com.iBME.emg_label_tool.dto.response.CoordinatesRes;
 import com.iBME.emg_label_tool.dto.response.DataFileRes;
 import com.iBME.emg_label_tool.entity.DataFile;
 import com.iBME.emg_label_tool.entity.User;
@@ -20,4 +21,6 @@ public interface DataFileService {
     List<DataFileRes> getAllDataFile();
 
     DataFileRes getDataFileByPatientId(long patientId);
+
+    List<CoordinatesRes> getXYCoordinates(long id);
 }

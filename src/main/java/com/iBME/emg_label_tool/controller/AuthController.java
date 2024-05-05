@@ -43,17 +43,17 @@ public class AuthController {
             tokenObj.setCreated(LocalDateTime.now());
             redisTemplate.opsForHash().put(refreshToken,refreshToken.hashCode(), tokenObj);
             redisTemplate.expire(refreshToken, 300, TimeUnit.SECONDS);
-            return new AuthenticationResponse(accessToken,refreshToken);
+            return new AuthenticationResponse(accessToken, refreshToken);
         }
         catch (Exception e) {
-            throw  new UnAuthorizedException(e.getMessage());
+            throw new UnAuthorizedException(e.getMessage());
         }
 }
 
     @PostMapping("/refresh-token")
     public AuthenticationResponse refresh(@RequestBody @Valid RefreshTokenReq refreshTokenReq) {
         String refreshToken = refreshTokenReq.getRefresh_token();
-        TokenObj tokenObj = (TokenObj) redisTemplate.opsForHash().get(refreshToken,refreshToken.hashCode());
+        TokenObj tokenObj = (TokenObj) redisTemplate.opsForHash().get(refreshToken, refreshToken.hashCode());
 
         if (ObjectUtils.isEmpty(tokenObj)  ) {
             throw new RefreshTokenFailedException("Refresh Token isn't match or expired!");

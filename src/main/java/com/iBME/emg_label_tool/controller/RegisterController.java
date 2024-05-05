@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,15 +39,21 @@ public class RegisterController {
 
 
     @PostMapping("/generate-otp")
-    public MessageResponse generateOTP(@RequestBody @Valid RegisterReq registerReq) {
-        MessageResponse ms = new MessageResponse();
-        ms.message = "Sent";
+    public ResponseEntity<?> generateOTP(@RequestBody @Valid RegisterReq registerReq) {
+        ResponseEntity<?> re = ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Sent");
+//        MessageResponse ms = new MessageResponse();
+//        ms.message = "Sent";
         String email = registerReq.getEmail();
 
         try {
             if (userService.findByEmail(registerReq.getEmail()).isPresent()) {
-                ms.code = HttpStatus.NOT_FOUND.value();
-                ms.message = "Your email has been used!";
+//                ms.code = HttpStatus.NOT_FOUND.value();
+//                ms.message = "Your email has been used!";
+                re = ResponseEntity
+                        .status(HttpStatus.CONFLICT)
+                        .body("Your email has been used!");
             } else {
                 int otp = otpService.generateOTP(email);
                 //Generate The Template to send OTP
@@ -60,19 +67,25 @@ public class RegisterController {
             }
 
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_ACCEPTABLE.value();
-            ms.message = ex.getMessage();
+            re = ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(ex.getMessage());
+//            ms.code = HttpStatus.NOT_ACCEPTABLE.value();
+//            ms.message = ex.getMessage();
         }
-        return ms;
+        return re;
     }
 
     @PostMapping("/validate-otp")
-    public MessageResponse validateOtp(@RequestBody @Valid ConfirmOTP confirmOTP) {
+    public ResponseEntity<?> validateOtp(@RequestBody @Valid ConfirmOTP confirmOTP) {
         final String SUCCESS = "Register Successfully!";
         final String FAIL = "Entered Otp is NOT valid. Please Retry!";
 
-        MessageResponse ms = new MessageResponse();
-        ms.message = SUCCESS;
+//        MessageResponse ms = new MessageResponse();
+//        ms.message = SUCCESS;
+        ResponseEntity<?> re = ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SUCCESS);
         String email = confirmOTP.getEmail();
         RegisterReq registerReq =   (RegisterReq) redisTemplate.opsForHash().get(email,email.hashCode());
         int otpnum = confirmOTP.getOtpNum();
@@ -91,22 +104,34 @@ public class RegisterController {
                         }
                         redisTemplate.opsForHash().getOperations().delete(email);
                     } catch (Exception e) {
-                        ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-                        ms.message = e.getMessage();
+                        re = ResponseEntity
+                                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body(e.getMessage());
+//                        ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+//                        ms.message = e.getMessage();
                     }
                 } else {
-                    ms.code = HttpStatus.UNAUTHORIZED.value();
-                    ms.message = FAIL;
+                    re = ResponseEntity
+                            .status(HttpStatus.UNAUTHORIZED)
+                            .body(FAIL);
+//                    ms.code = HttpStatus.UNAUTHORIZED.value();
+//                    ms.message = FAIL;
                 }
             } else {
-                ms.code = HttpStatus.UNAUTHORIZED.value();
-                ms.message = FAIL;
+                re = ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .body(FAIL);
+//                ms.code = HttpStatus.UNAUTHORIZED.value();
+//                ms.message = FAIL;
             }
         } else {
-            ms.code = HttpStatus.UNAUTHORIZED.value();
-            ms.message = FAIL;
+            re = ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(FAIL);
+//            ms.code = HttpStatus.UNAUTHORIZED.value();
+//            ms.message = FAIL;
         }
-        return ms;
+        return re;
     }
 
 

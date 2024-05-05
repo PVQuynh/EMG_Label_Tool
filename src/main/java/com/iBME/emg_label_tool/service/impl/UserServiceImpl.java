@@ -14,7 +14,7 @@ import com.iBME.emg_label_tool.repository.UserRepository;
 import com.iBME.emg_label_tool.service.KeycloakService;
 import com.iBME.emg_label_tool.service.UserService;
 import com.iBME.emg_label_tool.utils.EmailUtils;
-import com.iBME.emg_label_tool.utils.RandomString;
+import com.iBME.emg_label_tool.utils.RandomStringUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
     public User randomlyGeneratePassword(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(BusinessLogicException::new);
 
-        String password = RandomString.generateRandomString(12);
+        String password = RandomStringUtils.generateRandomString(12);
         user.setPassword(password);
         keycloakService.randomlyGeneratePassword(email, password);
 

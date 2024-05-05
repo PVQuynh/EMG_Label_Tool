@@ -1,10 +1,10 @@
 package com.iBME.emg_label_tool.controller;
 
 import com.iBME.emg_label_tool.dto.request.PatientReq;
-import com.iBME.emg_label_tool.dto.response.MessageResponse;
 import com.iBME.emg_label_tool.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,45 +13,41 @@ import org.springframework.web.bind.annotation.*;
 public class PatientController {
     private final PatientService patientService;
     
-    @PostMapping
-    public MessageResponse save(@RequestBody PatientReq patientReq) {
-        MessageResponse ms = new MessageResponse();
-
-        try {
-            patientService.save(patientReq);
-        } catch (Exception ex) {
-            ms.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            ms.message = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
-        }
-
-        return ms;
-    }
+//    @PostMapping
+//    public ResponseEntity<?>  save(@RequestBody PatientReq patientReq) {
+//        ResponseEntity<?> re = ResponseEntity.ok("Save patient successfully!");;
+//        try {
+//            patientService.save(patientReq);
+//        } catch (Exception ex) {
+//            re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+//        }
+//
+//        return re;
+//    }
 
     @GetMapping("/{id}")
-    public MessageResponse getPatient(@PathVariable("id") long id) {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?>  getPatient(@PathVariable("id") long id) {
+        ResponseEntity<?> re = ResponseEntity.ok(null);
 
         try {
-            ms.data = patientService.getPatient(id);
+            re = ResponseEntity.ok(patientService.getPatient(id));
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 
     @GetMapping("/all")
-    public MessageResponse getAllPatient() {
-        MessageResponse ms = new MessageResponse();
+    public ResponseEntity<?>  getAllPatient() {
+        ResponseEntity<?> re = ResponseEntity.ok(null);
 
         try {
-            ms.data = patientService.getAllPatient();
+            re = ResponseEntity.ok(patientService.getAllPatient());
         } catch (Exception ex) {
-            ms.code = HttpStatus.NOT_FOUND.value();
-            ms.message = HttpStatus.NOT_FOUND.getReasonPhrase();
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
 
-        return ms;
+        return re;
     }
 }
