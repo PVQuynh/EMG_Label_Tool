@@ -9,6 +9,8 @@ import com.iBME.emg_label_tool.dto.response.CoordinatesRes;
 import com.iBME.emg_label_tool.dto.response.DataFileRes;
 import com.iBME.emg_label_tool.entity.DataFile;
 import com.iBME.emg_label_tool.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,4 +25,6 @@ public interface DataFileService {
     DataFileRes getDataFileByPatientId(long patientId);
 
     List<CoordinatesRes> getXYCoordinates(long id);
+
+    List<CoordinatesRes> getXYCoordinatesV2(long id, int page, int size);
 }

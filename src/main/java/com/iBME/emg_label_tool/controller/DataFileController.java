@@ -3,6 +3,8 @@ package com.iBME.emg_label_tool.controller;
 import com.iBME.emg_label_tool.dto.request.DataFileReq;
 import com.iBME.emg_label_tool.service.DataFileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +47,22 @@ public class DataFileController {
         ResponseEntity<?> re = ResponseEntity.ok(null);
         try {
             re = ResponseEntity.ok(dataFileService.getXYCoordinates(id));
+        } catch (Exception ex) {
+            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+
+        }
+        return re;
+    }
+
+    @GetMapping("/xy-coordinates/v2")
+    public ResponseEntity<?> xyCoordinatesV2(
+            @RequestParam(required = true) long id,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "2000") int size
+    ) {
+        ResponseEntity<?> re;
+        try {
+            re = ResponseEntity.ok(dataFileService.getXYCoordinatesV2(id, page, size));
         } catch (Exception ex) {
             re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 

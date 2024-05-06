@@ -11,9 +11,7 @@ import com.iBME.emg_label_tool.service.DataFileService;
 import com.iBME.emg_label_tool.utils.UploadedFileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,4 +44,16 @@ public class DataFileServiceImpl implements DataFileService {
 
         return UploadedFileUtils.coordinatesList(dataFile.getDataFileLocation());
     }
+
+    @Override
+    public List<CoordinatesRes> getXYCoordinatesV2(long id, int page, int size) {
+        DataFile dataFile = dataFileRepository.findById(id).orElseThrow(BusinessLogicException::new);
+
+        int start = (page - 1) * size + 1;
+        int end = start + size - 1;
+        return UploadedFileUtils.coordinatesListV2(dataFile.getDataFileLocation(), start, end);
+//        return new PageImpl<>(coordinatesList.subList(start, end), pageable, coordinatesList.size());
+
+    }
+
 }

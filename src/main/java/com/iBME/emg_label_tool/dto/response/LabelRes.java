@@ -20,9 +20,6 @@ public class LabelRes {
 
     private boolean doubleCheck;
 
-    @Column(nullable = false)
-    private String patientDataLocation;
-
     private long dataFileId;
 
     private String dataFileName;

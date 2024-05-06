@@ -141,7 +141,7 @@ public class UploadedFileUtils {
     //
     public static List<CoordinatesRes> coordinatesList(String fileLocation) {
         String startLinePrefix = "1,";
-        String endLinePrefix = "20000,";
+        String endLinePrefix = "2000,";
         List<CoordinatesRes> coordinatesList = new LinkedList<>();
         boolean shouldRead = false;
 
@@ -171,6 +171,34 @@ public class UploadedFileUtils {
             System.out.println(e.getMessage());
         }
 
+        return coordinatesList;
+    }
+
+    public static List<CoordinatesRes> coordinatesListV2(String fileLocation, int start, int end) {
+        List<CoordinatesRes> coordinatesList = new LinkedList<>();
+        String startLinePrefix = start + ",";
+        String endLinePrefix = end + ",";
+        boolean shouldRead = false;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(fileLocation).openStream()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // nếu bắt đầu là start
+                if (line.startsWith(startLinePrefix)) {
+                    shouldRead = true;
+                }
+                // luôn cho phép add khi gặp dòng start
+                if (shouldRead) {
+                    coordinatesList.add(CoordinatesRes.getXYCoordinates(line));
+                }
+                // kết thúc khi gặp dòng end
+                if (line.startsWith(endLinePrefix)) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         return coordinatesList;
     }
 }
