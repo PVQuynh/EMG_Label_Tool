@@ -3,7 +3,11 @@ package com.iBME.emg_label_tool.mapper.impl;
 import com.iBME.emg_label_tool.dto.request.DataFileReq;
 import com.iBME.emg_label_tool.dto.response.DataFileRes;
 import com.iBME.emg_label_tool.entity.DataFile;
+import com.iBME.emg_label_tool.entity.Patient;
+import com.iBME.emg_label_tool.exception.BusinessLogicException;
 import com.iBME.emg_label_tool.mapper.DataFileMapper;
+import com.iBME.emg_label_tool.repository.PatientRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +15,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class DataFileMapperImpl implements DataFileMapper {
+    private final PatientRepository patientRepository;
 
     @Override
     public DataFile toEntity(DataFileReq dto) {
         ModelMapper modelMapper = new ModelMapper();
+        DataFile dataFile = modelMapper.map(dto, DataFile.class);
+        dataFile.setId(0);
 
-        return modelMapper.map(dto, DataFile.class);
+        // Get patient
+        Patient patient = patientRepository.findById(dto.getPatientId()).orElseThrow(BusinessLogicException::new);
+        dataFile.setPatient(patient);
+
+        return dataFile;
     }
 
     @Override

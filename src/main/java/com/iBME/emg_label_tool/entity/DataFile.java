@@ -32,20 +32,9 @@ public class DataFile extends  BaseEntity {
 
     private boolean isDeleted;
 
-    @OneToOne(
-            mappedBy = "dataFile",
-            cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
-    )
-    @JoinTable(
-            name = "user_data_file",
-            joinColumns = @JoinColumn(name = "data_file_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> userList;
 
     @OneToMany(
             mappedBy = "dataFile",

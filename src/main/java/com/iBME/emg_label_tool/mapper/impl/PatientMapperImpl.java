@@ -16,8 +16,10 @@ public class PatientMapperImpl implements PatientMapper {
     @Override
     public Patient toEntity(PatientReq dto) {
         ModelMapper modelMapper = new ModelMapper();
+        Patient patient = modelMapper.map(dto, Patient.class);
+        patient.setId(0);
 
-        return modelMapper.map(dto, Patient.class);
+        return patient;
     }
 
     @Override

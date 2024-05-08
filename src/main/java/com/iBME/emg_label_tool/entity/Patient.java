@@ -2,12 +2,10 @@ package com.iBME.emg_label_tool.entity;
 
 import com.iBME.emg_label_tool.enum_constant.Sex;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -33,7 +31,19 @@ public class Patient extends  BaseEntity {
 
     private boolean isDeleted;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "data_file_id")
-    private DataFile dataFile;
+    @OneToMany(
+            mappedBy = "patient",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL})
+    private List<DataFile> dataFileList;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.ALL}
+    )
+    @JoinTable(
+            name = "user_patient",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> userList;
 }

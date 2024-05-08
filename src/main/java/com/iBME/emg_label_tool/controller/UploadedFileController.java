@@ -1,5 +1,6 @@
 package com.iBME.emg_label_tool.controller;
 
+import com.iBME.emg_label_tool.exception.AlreadyExistsException;
 import com.iBME.emg_label_tool.service.UploadedFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,10 @@ public class UploadedFileController {
         ResponseEntity<?> re = ResponseEntity.ok(null);
         try {
             re = ResponseEntity.ok(uploadedFileService.save(file));
+        } catch (AlreadyExistsException ex) {
+            re = ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (Exception ex) {
             re = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-
         }
         return re;
     }

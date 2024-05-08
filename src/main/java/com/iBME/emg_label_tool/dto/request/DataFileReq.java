@@ -24,4 +24,6 @@ public class DataFileReq {
     @Column(nullable = false)
     private String dataFileLocation;
 
+    private long patientId;
+
 }

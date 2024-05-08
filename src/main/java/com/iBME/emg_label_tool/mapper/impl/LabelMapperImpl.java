@@ -1,6 +1,7 @@
 package com.iBME.emg_label_tool.mapper.impl;
 
 import com.iBME.emg_label_tool.dto.request.LabelReq;
+import com.iBME.emg_label_tool.dto.request.UpdateLabelReq;
 import com.iBME.emg_label_tool.dto.response.LabelRes;
 import com.iBME.emg_label_tool.entity.DataFile;
 import com.iBME.emg_label_tool.entity.Disease;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,6 +27,7 @@ public class LabelMapperImpl implements LabelMapper {
     public Label toEntity(LabelReq dto) {
         ModelMapper modelMapper = new ModelMapper();
         Label label = modelMapper.map(dto, Label.class);
+        label.setId(0);
 
         // disease
         Disease disease = diseaseRepository.findById(dto.getDiseaseId()).orElse(null);

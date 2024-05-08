@@ -1,5 +1,6 @@
 package com.iBME.emg_label_tool.entity;
 
+import com.iBME.emg_label_tool.dto.request.UpdateLabelReq;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,4 +32,5 @@ public class Label extends  BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "disease_id")
     private Disease disease;
+
 }

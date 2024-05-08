@@ -16,8 +16,10 @@ public class DiseaseMapperImpl implements DiseaseMapper {
     @Override
     public Disease toEntity(DiseaseReq dto) {
         ModelMapper modelMapper = new ModelMapper();
+        Disease disease = modelMapper.map(dto, Disease.class);
+        disease.setId(0);
 
-        return modelMapper.map(dto, Disease.class);
+        return disease;
     }
 
     @Override

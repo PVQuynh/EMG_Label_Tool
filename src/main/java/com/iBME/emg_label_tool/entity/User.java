@@ -50,11 +50,11 @@ public class User extends  BaseEntity {
             cascade = {CascadeType.ALL}
     )
     @JoinTable(
-            name = "user_data_file",
+            name = "user_patient",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "data_file_id")
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
     )
-    private List<DataFile> dataFileList;
+    private List<Patient> patientList;
 
 }
 

@@ -26,6 +26,4 @@ public class PatientReq {
     private float height;
 
     private float weight;
-
-    private long dataFileId;
 }
