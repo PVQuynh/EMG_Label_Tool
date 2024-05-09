@@ -29,18 +29,18 @@ public class DataFileController {
 //        return re;
 //    }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllDataFile() {
-        ResponseEntity<?> re = ResponseEntity.ok(null);
-
-        try {
-            re = ResponseEntity.ok(dataFileService.getAllDataFile());
-        } catch (Exception ex) {
-            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-
-        return re;
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<?> getAllDataFile() {
+//        ResponseEntity<?> re = ResponseEntity.ok(null);
+//
+//        try {
+//            re = ResponseEntity.ok(dataFileService.getAllDataFile());
+//        } catch (Exception ex) {
+//            re = ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//        }
+//
+//        return re;
+//    }
 
     @GetMapping("/xy-coordinates/{id}")
     public ResponseEntity<?> xyCoordinates(@PathVariable("id") long id) {

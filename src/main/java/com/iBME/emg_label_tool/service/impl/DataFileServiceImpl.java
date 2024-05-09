@@ -33,9 +33,12 @@ public class DataFileServiceImpl implements DataFileService {
     }
 
     @Override
-    public DataFileRes getDataFileByPatientId(long patientId) {
-        DataFile dataFile = dataFileRepository.findByPatientId(patientId).orElseThrow(BusinessLogicException::new);
-        return dataFileMapper.toDTO(dataFile);
+    public List<DataFileRes> getDataFileByPatientId(long patientId) {
+        List<DataFile> dataFileList = dataFileRepository.findAllByPatientId(patientId);
+        if (dataFileList.isEmpty()) {
+            throw new BusinessLogicException();
+        }
+        return dataFileMapper.toDTOList(dataFileList);
     }
 
     @Override

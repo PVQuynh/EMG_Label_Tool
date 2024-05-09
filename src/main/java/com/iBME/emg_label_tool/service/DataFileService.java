@@ -22,7 +22,7 @@ public interface DataFileService {
 
     List<DataFileRes> getAllDataFile();
 
-    DataFileRes getDataFileByPatientId(long patientId);
+    List<DataFileRes> getDataFileByPatientId(long patientId);
 
     List<CoordinatesRes> getXYCoordinates(long id);
 

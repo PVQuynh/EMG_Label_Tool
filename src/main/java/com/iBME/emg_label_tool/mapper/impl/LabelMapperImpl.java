@@ -45,7 +45,7 @@ public class LabelMapperImpl implements LabelMapper {
         ModelMapper modelMapper = new ModelMapper();
 
         LabelRes labelRes = modelMapper.map(entity, LabelRes.class);
-        labelRes.setLabelResId(entity.getId());
+        labelRes.setLabelId(entity.getId());
 
         return labelRes;
     }

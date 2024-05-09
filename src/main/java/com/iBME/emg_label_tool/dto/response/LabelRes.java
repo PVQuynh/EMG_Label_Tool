@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LabelRes {
 
-    private long labelResId;
+    private long labelId;
 
     private float start;
 

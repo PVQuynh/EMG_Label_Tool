@@ -53,6 +53,9 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public List<LabelRes> getAllLabelByDataFileId(long dataFileId) {
         List<Label> labelList = labelRepository.findAllByDataFileId(dataFileId);
+        if (labelList.isEmpty()) {
+            throw new BusinessLogicException();
+        }
         return labelMapper.toDTOList(labelList);
     }
 
